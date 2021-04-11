@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - DiceBlock
+  - BoardSpace
   layers:
   - Default
   - TransparentFX

@@ -14,10 +14,13 @@ public class PlayerScript : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
     public float jumpForce = 10;
+    public float speed = 5;
 
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
     bool diceBlockHit = false;
+    int moveSpaces = 0;
+    bool isGrounded = true;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +45,13 @@ public class PlayerScript : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.gameObject.CompareTag("DiceBlock"))
+                if (hit.collider.gameObject.CompareTag("DiceBlock") && !diceBlockHit)
                 {
-                    Debug.Log("Touching Dice Block");
+                    // NOTE: Player should jump once
+                    diceBlockHit = true;
+
+                    // Make player jump when they touch the dice block
+                    playerRB.AddForce(Vector3.up * jumpForce);
                 }
             }
         }
@@ -74,8 +81,20 @@ public class PlayerScript : MonoBehaviour
                     
                     // Make player jump when they touch the dice block
                     playerRB.AddForce(Vector3.up * jumpForce);
+
+                    isGrounded = false;
                 }
             }
+        }
+
+        // If the player has rolled the dice, move that many spaces
+        if (moveSpaces > 0 && isGrounded)
+        {
+            float step = speed * Time.deltaTime;
+
+            Vector3 targetPos = new Vector3(2 * moveSpaces, 1);
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
         }
     }
 
@@ -83,7 +102,16 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("DiceBlock"))
         {
+            DiceScript diceScript = collision.gameObject.GetComponent<DiceScript>();
+
+            moveSpaces = diceScript.number;
+            
             Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("BoardSpace"))
+        {
+            isGrounded = true;
         }
     }
 }

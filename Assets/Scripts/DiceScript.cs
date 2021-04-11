@@ -16,10 +16,12 @@ public class DiceScript : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
     public TextMeshProUGUI diceText;
+    [HideInInspector]
+    public int number = 1;
 
     //===== PRIVATE VARIABLES =====
-    private int number = 1;
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
