@@ -12,10 +12,17 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    //===== PUBLIC VARIABLES =====
+    public float jumpForce = 10;
+
+    //===== PRIVATE VARIABLES =====
+    Rigidbody playerRB;
+    bool diceBlockHit = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerRB = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -49,7 +56,7 @@ public class PlayerScript : MonoBehaviour
         {
 
         }
-        else if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        else if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             // Get the touch position
             Vector2 touchPosition = Input.mousePosition;
@@ -60,13 +67,23 @@ public class PlayerScript : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.gameObject.CompareTag("DiceBlock"))
+                if (hit.collider.gameObject.CompareTag("DiceBlock") && !diceBlockHit)
                 {
-                    Debug.Log("Touching Dice Block");
-
-                    // TODO - Make player jump when they touch the dice block
+                    // NOTE: Player should jump once
+                    diceBlockHit = true;
+                    
+                    // Make player jump when they touch the dice block
+                    playerRB.AddForce(Vector3.up * jumpForce);
                 }
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("DiceBlock"))
+        {
+            Destroy(collision.gameObject);
         }
     }
 }
