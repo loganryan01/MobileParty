@@ -1,2 +1,2 @@
 # MobileParty
-Mario Party for Android phones
+Party video game for Android phones
