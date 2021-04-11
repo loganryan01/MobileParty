@@ -2,7 +2,7 @@
     Script Name: PlayerScript.cs
     Purpose: Control the player while their on the board stage.
     Author: Logan Ryan
-    Last Edit: 11 April 2021
+    Last Edit: 12 April 2021
 ---------------------------------------------------------------
     Copyright 2021 Logan Ryan
 -------------------------------------------------------------*/
