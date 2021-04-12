@@ -2,26 +2,26 @@
     Script Name: PlayerScript.cs
     Purpose: Control the player while their on the board stage.
     Author: Logan Ryan
-    Last Edit: 12 April 2021
+    Last Edit: 13 April 2021
 ---------------------------------------------------------------
     Copyright 2021 Logan Ryan
 -------------------------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
-    public TextMeshProUGUI diceText;
     public float jumpForce = 10;
     public float speed = 5;
+
+    [HideInInspector]
+    public int moveSpaces = 0;
 
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
     bool diceBlockHit = false;
-    int moveSpaces = 0;
     int xPosOfSpace = 0;
     bool isGrounded = true;
 
@@ -98,8 +98,6 @@ public class PlayerScript : MonoBehaviour
             Vector3 targetPos = new Vector3(2 * xPosOfSpace, 1);
 
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-
-            diceText.text = moveSpaces.ToString();
         }
     }
 
@@ -126,13 +124,6 @@ public class PlayerScript : MonoBehaviour
         if (other.gameObject.CompareTag("BoardSpace"))
         {
             moveSpaces--;
-
-            if (moveSpaces == 0)
-            {
-                string zeroText = "0";
-                
-                diceText.text = zeroText;
-            }
         }
     }
 }

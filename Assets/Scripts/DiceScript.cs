@@ -2,20 +2,17 @@
     Script Name: DiceScript.cs
     Purpose: Generate a random number for the player to move.
     Author: Logan Ryan
-    Last Edit: 12 April 2021
+    Last Edit: 13 April 2021
 -------------------------------------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class DiceScript : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
-    public TextMeshProUGUI diceText;
     [HideInInspector]
     public int number = 1;
 
@@ -40,8 +37,5 @@ public class DiceScript : MonoBehaviour
         {
             number = 1;
         }
-
-        // Display number
-        diceText.text = number.ToString();
     }
 }

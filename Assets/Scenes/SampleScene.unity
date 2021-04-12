@@ -1195,9 +1195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059e73e6466081747a6de19aeb2bf4a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceText: {fileID: 569535636}
   jumpForce: 250
   speed: 3
+  moveSpaces: 0
 --- !u!54 &1176397765
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1561,8 +1561,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd57d9c27b83e93449f777cb8019e11b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceText: {fileID: 569535636}
   number: 1
+--- !u!1 &1920861922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1920861924}
+  - component: {fileID: 1920861923}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1920861923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920861922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb585d2741dfc34428e1dc58c7052d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diceText: {fileID: 569535636}
+--- !u!4 &1920861924
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920861922}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1979616059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,6 +1862,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1677444542388708621, guid: dbda5cbbf99f7a94288fa4e3445dae2b, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1677444542388708621, guid: dbda5cbbf99f7a94288fa4e3445dae2b, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5173109144330821777, guid: dbda5cbbf99f7a94288fa4e3445dae2b, type: 3}
