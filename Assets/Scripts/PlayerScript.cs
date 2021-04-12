@@ -9,10 +9,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
+    public TextMeshProUGUI diceText;
     public float jumpForce = 10;
     public float speed = 5;
 
@@ -20,6 +22,7 @@ public class PlayerScript : MonoBehaviour
     Rigidbody playerRB;
     bool diceBlockHit = false;
     int moveSpaces = 0;
+    int xPosOfSpace = 0;
     bool isGrounded = true;
 
     // Start is called before the first frame update
@@ -92,11 +95,11 @@ public class PlayerScript : MonoBehaviour
         {
             float step = speed * Time.deltaTime;
 
-            Vector3 targetPos = new Vector3(2 * moveSpaces, 1);
+            Vector3 targetPos = new Vector3(2 * xPosOfSpace, 1);
 
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
 
-            // TODO - Decrease move spaces by 1 everytime the player lands on a new space
+            diceText.text = moveSpaces.ToString();
         }
     }
 
@@ -107,6 +110,7 @@ public class PlayerScript : MonoBehaviour
             DiceScript diceScript = collision.gameObject.GetComponent<DiceScript>();
 
             moveSpaces = diceScript.number;
+            xPosOfSpace = moveSpaces;
             
             Destroy(collision.gameObject);
         }
@@ -114,6 +118,21 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("BoardSpace"))
         {
             isGrounded = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("BoardSpace"))
+        {
+            moveSpaces--;
+
+            if (moveSpaces == 0)
+            {
+                string zeroText = "0";
+                
+                diceText.text = zeroText;
+            }
         }
     }
 }
