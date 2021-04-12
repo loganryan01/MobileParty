@@ -95,6 +95,8 @@ public class PlayerScript : MonoBehaviour
             Vector3 targetPos = new Vector3(2 * moveSpaces, 1);
 
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+
+            // TODO - Decrease move spaces by 1 everytime the player lands on a new space
         }
     }
 
