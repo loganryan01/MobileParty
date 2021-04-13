@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
 
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
+    GameObject startingSpace;
     bool diceBlockHit = false;
     int xPosOfSpace = 0;
     bool isGrounded = true;
@@ -98,6 +99,12 @@ public class PlayerScript : MonoBehaviour
             Vector3 targetPos = new Vector3(2 * xPosOfSpace, 1);
 
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+
+            // On Arrival Function
+            if (Vector3.Distance(transform.position, targetPos) < 0.001f)
+            {
+                moveSpaces--;
+            }
         }
     }
 
@@ -116,12 +123,18 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("BoardSpace"))
         {
             isGrounded = true;
+
+            if (startingSpace == null)
+            {
+                startingSpace = collision.gameObject;
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("BoardSpace"))
+        if (other.gameObject.CompareTag("BoardSpace") && 
+            startingSpace != other.gameObject.transform.parent.gameObject)
         {
             moveSpaces--;
         }

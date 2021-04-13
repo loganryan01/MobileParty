@@ -53,5 +53,6 @@ public class GameManager : MonoBehaviour
             }
         }
         
+        // TODO - Instantiate a new dice block when arrived at the final square
     }
 }
