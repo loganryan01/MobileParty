@@ -2,7 +2,7 @@
     Script Name: PlayerScript.cs
     Purpose: Control the player while their on the board stage.
     Author: Logan Ryan
-    Last Edit: 13 April 2021
+    Last Edit: 14 April 2021
 ---------------------------------------------------------------
     Copyright 2021 Logan Ryan
 -------------------------------------------------------------*/
@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
     GameObject startingSpace;
+    Vector3 posOfSpace;
     bool diceBlockHit = false;
     int xPosOfSpace = 0;
     bool isGrounded = true;
@@ -99,17 +100,17 @@ public class PlayerScript : MonoBehaviour
         {
             float step = speed * Time.deltaTime;
 
-            Vector3 targetPos = new Vector3(2 * xPosOfSpace, 1);
-
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+            transform.position = Vector3.MoveTowards(transform.position, posOfSpace, step);
 
             // On Arrival Function
-            if (Vector3.Distance(transform.position, targetPos) < 0.001f)
+            if (Vector3.Distance(transform.position, posOfSpace) < 0.001f)
             {
                 moveSpaces--;
 
                 arrived = true;
                 diceBlockHit = false;
+
+                startingSpace = null;
             }
         }
     }
@@ -121,7 +122,9 @@ public class PlayerScript : MonoBehaviour
             DiceScript diceScript = collision.gameObject.GetComponent<DiceScript>();
 
             moveSpaces = diceScript.number;
-            xPosOfSpace = moveSpaces;
+            xPosOfSpace = moveSpaces * 2;
+
+            posOfSpace = new Vector3(transform.position.x + xPosOfSpace, 1);
             
             Destroy(collision.gameObject);
         }
