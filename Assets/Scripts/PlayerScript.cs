@@ -20,6 +20,8 @@ public class PlayerScript : MonoBehaviour
     public int moveSpaces = 0;
     [HideInInspector]
     public bool arrived = false;
+    [HideInInspector]
+    public int coins = 0;
 
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
@@ -28,6 +30,7 @@ public class PlayerScript : MonoBehaviour
     bool diceBlockHit = false;
     int xPosOfSpace = 0;
     bool isGrounded = true;
+    
 
     // Start is called before the first frame update
     void Start()

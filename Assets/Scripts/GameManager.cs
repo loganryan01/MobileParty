@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     //===== PUBLIC VARIABLES =====
     public TextMeshProUGUI diceText;
     public TextMeshProUGUI turnText;
+    public TextMeshProUGUI coinText;
 
     //===== PRIVATE VARIABLES =====
     DiceScript diceScript;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // ===== DICE CONTROLS =====
         // Display the dice number if the dice has not been rolled
         if (GameObject.FindGameObjectWithTag("DiceBlock"))
         {
@@ -70,18 +72,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Display current turn
-        turnText.text = "Turn: " + turn + "/" + maximumTurns;
-
-        // When the player finishes last turn, the game is finished
-        if (turn > maximumTurns)
-            Debug.Log("Game Over");
-        
         // Instantiate a new dice block when arrived at the final square
         if (playerScript.arrived && diceBlock == null)
         {
-            Vector3 playerPosition = new Vector3(player.transform.position.x, 
-                                                 player.transform.position.y + 2.75f, 
+            Vector3 playerPosition = new Vector3(player.transform.position.x,
+                                                 player.transform.position.y + 2.75f,
                                                  player.transform.position.z);
 
             diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
@@ -90,5 +85,17 @@ public class GameManager : MonoBehaviour
             // Move to the next turn
             turn++;
         }
+
+        //===== TURN CONTROLS ====
+        // Display current turn
+        turnText.text = "Turn: " + turn + "/" + maximumTurns;
+
+        // When the player finishes last turn, the game is finished
+        if (turn > maximumTurns)
+            Debug.Log("Game Over");
+
+        //===== COIN CONTROLS =====
+        coinText.text = "Coins: " + playerScript.coins;
+        
     }
 }
