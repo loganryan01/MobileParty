@@ -2,7 +2,7 @@
     Script Name: GameManager.cs
     Purpose: Control the game.
     Author: Logan Ryan
-    Last Edit: 13 April 2021
+    Last Edit: 14 April 2021
 -------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------*/
@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
     DiceScript diceScript;
     PlayerScript playerScript;
 
+    GameObject diceBlock;
+
+    [SerializeField]
+    GameObject diceBlockPrefab;
+    [SerializeField]
+    GameObject player;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -28,6 +35,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Vector3 playerPosition = new Vector3(player.transform.position.x,
+                                             player.transform.position.y + 2.75f,
+                                             player.transform.position.z);
+
+        diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
+
         diceScript = GameObject.FindGameObjectWithTag("DiceBlock").GetComponent<DiceScript>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
     }
@@ -54,5 +67,14 @@ public class GameManager : MonoBehaviour
         }
         
         // TODO - Instantiate a new dice block when arrived at the final square
+        if (playerScript.arrived && diceBlock == null)
+        {
+            Vector3 playerPosition = new Vector3(player.transform.position.x, 
+                                                 player.transform.position.y + 2.75f, 
+                                                 player.transform.position.z);
+
+            diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
+            diceScript = diceBlock.GetComponent<DiceScript>();
+        }
     }
 }

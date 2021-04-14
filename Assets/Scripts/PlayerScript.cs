@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
 
     [HideInInspector]
     public int moveSpaces = 0;
+    [HideInInspector]
+    public bool arrived = false;
 
     //===== PRIVATE VARIABLES =====
     Rigidbody playerRB;
@@ -87,6 +89,7 @@ public class PlayerScript : MonoBehaviour
                     playerRB.AddForce(Vector3.up * jumpForce);
 
                     isGrounded = false;
+                    arrived = false;
                 }
             }
         }
@@ -104,6 +107,9 @@ public class PlayerScript : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPos) < 0.001f)
             {
                 moveSpaces--;
+
+                arrived = true;
+                diceBlockHit = false;
             }
         }
     }
