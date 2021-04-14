@@ -15,17 +15,20 @@ public class GameManager : MonoBehaviour
 {
     //===== PUBLIC VARIABLES =====
     public TextMeshProUGUI diceText;
+    public TextMeshProUGUI turnText;
 
     //===== PRIVATE VARIABLES =====
     DiceScript diceScript;
     PlayerScript playerScript;
-
     GameObject diceBlock;
+    int turn = 1;
 
     [SerializeField]
     GameObject diceBlockPrefab;
     [SerializeField]
     GameObject player;
+    [SerializeField]
+    int maximumTurns;
 
     private void Awake()
     {
@@ -58,6 +61,7 @@ public class GameManager : MonoBehaviour
             // Otherwise display the player's number of spaces left to move
             diceText.text = playerScript.moveSpaces.ToString();
 
+            // If the player has no more move spaces
             if (playerScript.moveSpaces == 0)
             {
                 string zeroText = "0";
@@ -65,8 +69,15 @@ public class GameManager : MonoBehaviour
                 diceText.text = zeroText;
             }
         }
+
+        // Display current turn
+        turnText.text = "Turn: " + turn + "/" + maximumTurns;
+
+        // When the player finishes last turn, the game is finished
+        if (turn > maximumTurns)
+            Debug.Log("Game Over");
         
-        // TODO - Instantiate a new dice block when arrived at the final square
+        // Instantiate a new dice block when arrived at the final square
         if (playerScript.arrived && diceBlock == null)
         {
             Vector3 playerPosition = new Vector3(player.transform.position.x, 
@@ -75,6 +86,9 @@ public class GameManager : MonoBehaviour
 
             diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
             diceScript = diceBlock.GetComponent<DiceScript>();
+
+            // Move to the next turn
+            turn++;
         }
     }
 }
