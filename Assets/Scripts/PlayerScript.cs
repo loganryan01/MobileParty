@@ -16,12 +16,14 @@ public class PlayerScript : MonoBehaviour
     public float jumpForce = 10;
     public float speed = 5;
 
-    [HideInInspector]
-    public int moveSpaces = 0;
+    //[HideInInspector]
+    public int moveSpaces = 22;
     [HideInInspector]
     public bool arrived = false;
+    //[HideInInspector]
+    public int coins = 20;
     [HideInInspector]
-    public int coins = 0;
+    public int stars = 0;
 
     //===== PRIVATE VARIABLES =====
     GameManager gameManager;
@@ -32,7 +34,6 @@ public class PlayerScript : MonoBehaviour
     bool diceBlockHit = false;
     int xPosOfSpace = 0;
     bool isGrounded = true;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -125,11 +126,15 @@ public class PlayerScript : MonoBehaviour
                 {
                     // Add coins when player lands on blue space
                     case "BlueSpaceMat (Instance)":
-                        coins += gameManager.coinsToAddOrRemove;
+                        gameManager.boardSpace = GameManager.SpaceType.BLUE;
                         break;
                     // Remove coins when player lands on red space 
                     case "RedSpaceMat (Instance)":
-                        coins -= gameManager.coinsToAddOrRemove;
+                        gameManager.boardSpace = GameManager.SpaceType.RED;
+                        break;
+                    // Add a star when the player buys a star
+                    case "StarSpaceMat (Instance)":
+                        gameManager.boardSpace = GameManager.SpaceType.STAR;
                         break;
                 }
             }
@@ -169,6 +174,14 @@ public class PlayerScript : MonoBehaviour
             startingSpace != other.gameObject.transform.parent.gameObject)
         {
             moveSpaces--;
+
+            // Check if the player is on the star space
+            Material spaceMat = other.gameObject.GetComponentInParent<MeshRenderer>().material;
+
+            if (spaceMat.name == "StarSpaceMat (Instance)")
+            {
+                gameManager.boardSpace = GameManager.SpaceType.STAR;
+            }
         }
     }
 }

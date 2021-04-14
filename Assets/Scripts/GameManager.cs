@@ -13,12 +13,27 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public enum SpaceType
+    {
+        NONE,
+        BLUE,
+        RED,
+        EVENT,
+        STAR
+    }
+    
     //===== PUBLIC VARIABLES =====
     public TextMeshProUGUI diceText;
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI coinText;
+    public TextMeshProUGUI starText;
+    public TextMeshProUGUI starQuestion;
+    public GameObject starUI;
+    public GameObject continueButton;
+    public SpaceType boardSpace;
 
-    public int coinsToAddOrRemove = 0;
+    public int coinsToAddOrRemove = 5;
+    public int priceForAStar = 20;
 
     //===== PRIVATE VARIABLES =====
     DiceScript diceScript;
@@ -99,10 +114,61 @@ public class GameManager : MonoBehaviour
 
         //===== COIN CONTROLS =====
         if (playerScript.coins < 0)
+        {
             playerScript.coins = 0;
+        }
 
-        coinText.text = "Coins: " + playerScript.coins;
+        switch (boardSpace)
+        {
+            case SpaceType.BLUE:
+                playerScript.coins += coinsToAddOrRemove;
+                break;
+            case SpaceType.RED:
+                playerScript.coins -= coinsToAddOrRemove;
+                break;
+        }
 
         
+        coinText.text = "Coins: " + playerScript.coins;
+
+        //====== STAR CONTROLS =====
+        if (playerScript.stars < 0)
+        {
+            playerScript.stars = 0;
+        }
+
+        if (boardSpace == SpaceType.STAR)
+        {
+            Time.timeScale = 0;
+            starQuestion.text = "Do you want to buy the star?";
+            starUI.SetActive(true);
+            continueButton.SetActive(false);
+        }
+
+        starText.text = "Stars: " + playerScript.stars;
+
+        boardSpace = SpaceType.NONE;
+    }
+
+    public void ObtainStar()
+    {
+        if (playerScript.coins >= priceForAStar)
+        {
+            starQuestion.text = "Congratulations, You got a star!";
+            playerScript.coins -= priceForAStar;
+            playerScript.stars++;
+        }
+        else if (playerScript.coins < priceForAStar)
+        {
+            starQuestion.text = "Sorry but you don't have enough to buy the star!";
+        }
+
+        continueButton.SetActive(true);
+    }
+
+    public void RefuseStar()
+    {
+        Time.timeScale = 1;
+        starUI.SetActive(false);
     }
 }
