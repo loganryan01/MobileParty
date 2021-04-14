@@ -24,8 +24,10 @@ public class PlayerScript : MonoBehaviour
     public int coins = 0;
 
     //===== PRIVATE VARIABLES =====
+    GameManager gameManager;
     Rigidbody playerRB;
     GameObject startingSpace;
+    GameObject currentSpace;
     Vector3 posOfSpace;
     bool diceBlockHit = false;
     int xPosOfSpace = 0;
@@ -36,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -114,6 +117,21 @@ public class PlayerScript : MonoBehaviour
                 diceBlockHit = false;
 
                 startingSpace = null;
+
+                // Check what sort of space the player is on
+                Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
+
+                switch (spaceMat.name)
+                {
+                    // Add coins when player lands on blue space
+                    case "BlueSpaceMat (Instance)":
+                        coins += gameManager.coinsToAddOrRemove;
+                        break;
+                    // Remove coins when player lands on red space 
+                    case "RedSpaceMat (Instance)":
+                        coins -= gameManager.coinsToAddOrRemove;
+                        break;
+                }
             }
         }
     }
@@ -136,9 +154,11 @@ public class PlayerScript : MonoBehaviour
         {
             isGrounded = true;
 
+            currentSpace = collision.gameObject;
+
             if (startingSpace == null)
             {
-                startingSpace = collision.gameObject;
+                startingSpace = currentSpace;
             }
         }
     }

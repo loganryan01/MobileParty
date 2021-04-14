@@ -3267,7 +3267,7 @@ GameObject:
   - component: {fileID: 1920861923}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3287,6 +3287,7 @@ MonoBehaviour:
   diceText: {fileID: 569535636}
   turnText: {fileID: 1931515600}
   coinText: {fileID: 1388926883}
+  coinsToAddOrRemove: 5
   diceBlockPrefab: {fileID: 4059421305614944305, guid: db275163f96089f4e9c3ad78a543369d, type: 3}
   player: {fileID: 1176397763}
   maximumTurns: 10

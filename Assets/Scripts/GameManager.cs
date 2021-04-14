@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI turnText;
     public TextMeshProUGUI coinText;
 
+    public int coinsToAddOrRemove = 0;
+
     //===== PRIVATE VARIABLES =====
     DiceScript diceScript;
     PlayerScript playerScript;
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     GameObject player;
     [SerializeField]
     int maximumTurns;
+    
 
     private void Awake()
     {
@@ -95,7 +98,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("Game Over");
 
         //===== COIN CONTROLS =====
+        if (playerScript.coins < 0)
+            playerScript.coins = 0;
+
         coinText.text = "Coins: " + playerScript.coins;
+
         
     }
 }
