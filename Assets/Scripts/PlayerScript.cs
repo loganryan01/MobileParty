@@ -16,12 +16,12 @@ public class PlayerScript : MonoBehaviour
     public float jumpForce = 10;
     public float speed = 5;
 
-    //[HideInInspector]
-    public int moveSpaces = 22;
+    [HideInInspector]
+    public int moveSpaces = 0;
     [HideInInspector]
     public bool arrived = false;
-    //[HideInInspector]
-    public int coins = 20;
+    [HideInInspector]
+    public int coins = 0;
     [HideInInspector]
     public int stars = 0;
 
@@ -135,6 +135,9 @@ public class PlayerScript : MonoBehaviour
                     // Add a star when the player buys a star
                     case "StarSpaceMat (Instance)":
                         gameManager.boardSpace = GameManager.SpaceType.STAR;
+                        break;
+                    case "EventSpaceMat (Instance)":
+                        gameManager.boardSpace = GameManager.SpaceType.EVENT;
                         break;
                 }
             }

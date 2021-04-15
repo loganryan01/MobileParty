@@ -29,11 +29,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI starText;
     public TextMeshProUGUI starQuestion;
     public GameObject starUI;
+    public TextMeshProUGUI eventUI;
     public GameObject continueButton;
-    public SpaceType boardSpace;
+    public EventAction[] eventActions;
 
     public int coinsToAddOrRemove = 5;
     public int priceForAStar = 20;
+
+    [HideInInspector]
+    public SpaceType boardSpace;
 
     //===== PRIVATE VARIABLES =====
     DiceScript diceScript;
@@ -147,6 +151,17 @@ public class GameManager : MonoBehaviour
 
         starText.text = "Stars: " + playerScript.stars;
 
+        //===== EVENT SPACE CONTROLS =====
+        if (boardSpace == SpaceType.EVENT)
+        {
+            // Choose a random event from the list of events
+            int eventAction = Random.Range(0, eventActions.Length);
+
+            // Implement the event
+            StartCoroutine(EventSpace(eventAction));
+        }
+
+        // Reset the boardSpace variable 
         boardSpace = SpaceType.NONE;
     }
 
@@ -170,5 +185,20 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         starUI.SetActive(false);
+    }
+
+    IEnumerator EventSpace(int index)
+    {
+        eventUI.gameObject.SetActive(true);
+        eventUI.text = eventActions[index].message;
+        
+        playerScript.coins += eventActions[index].coinsToAdd;
+        playerScript.coins -= eventActions[index].coinsToRemove;
+        playerScript.stars += eventActions[index].starsToAdd;
+        playerScript.stars -= eventActions[index].starsToRemove;
+
+        yield return new WaitForSeconds(5);
+
+        eventUI.gameObject.SetActive(false);
     }
 }
