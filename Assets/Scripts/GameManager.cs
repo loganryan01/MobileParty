@@ -2,7 +2,7 @@
     Script Name: GameManager.cs
     Purpose: Control the game.
     Author: Logan Ryan
-    Last Edit: 14 April 2021
+    Last Edit: 15 April 2021
 -------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------*/
@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public EventAction[] eventActions;
 
     public int coinsToAddOrRemove = 5;
+    public string blueSpaceMessage;
+    public string redSpaceMessage;
     public int priceForAStar = 20;
 
     [HideInInspector]
@@ -79,6 +81,7 @@ public class GameManager : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("DiceBlock"))
         {
             diceText.text = diceScript.number.ToString();
+            diceText.gameObject.SetActive(true);
         }
         else
         {
@@ -88,24 +91,11 @@ public class GameManager : MonoBehaviour
             // If the player has no more move spaces
             if (playerScript.moveSpaces == 0)
             {
-                string zeroText = "0";
+                //string zeroText = "0";
 
-                diceText.text = zeroText;
+                //diceText.text = zeroText;
+                diceText.gameObject.SetActive(false);
             }
-        }
-
-        // Instantiate a new dice block when arrived at the final square
-        if (playerScript.arrived && diceBlock == null)
-        {
-            Vector3 playerPosition = new Vector3(player.transform.position.x,
-                                                 player.transform.position.y + 2.75f,
-                                                 player.transform.position.z);
-
-            diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
-            diceScript = diceBlock.GetComponent<DiceScript>();
-
-            // Move to the next turn
-            turn++;
         }
 
         //===== TURN CONTROLS ====
@@ -125,10 +115,10 @@ public class GameManager : MonoBehaviour
         switch (boardSpace)
         {
             case SpaceType.BLUE:
-                playerScript.coins += coinsToAddOrRemove;
+                StartCoroutine(BlueSpace());
                 break;
             case SpaceType.RED:
-                playerScript.coins -= coinsToAddOrRemove;
+                StartCoroutine(RedSpace());
                 break;
         }
 
@@ -143,6 +133,7 @@ public class GameManager : MonoBehaviour
 
         if (boardSpace == SpaceType.STAR)
         {
+            diceText.gameObject.SetActive(true);
             Time.timeScale = 0;
             starQuestion.text = "Do you want to buy the star?";
             starUI.SetActive(true);
@@ -185,6 +176,53 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         starUI.SetActive(false);
+
+        diceText.gameObject.SetActive(true);
+
+        if (playerScript.arrived)
+        {
+            SpawnDiceBlock();
+            turn++;
+        }
+        
+    }
+
+    void SpawnDiceBlock()
+    {
+        Vector3 playerPosition = new Vector3(player.transform.position.x,
+                                                player.transform.position.y + 2.75f,
+                                                player.transform.position.z);
+
+        diceBlock = Instantiate(diceBlockPrefab, playerPosition, Quaternion.identity);
+        diceScript = diceBlock.GetComponent<DiceScript>();
+    }
+
+    IEnumerator BlueSpace()
+    {
+        eventUI.gameObject.SetActive(true);
+        eventUI.text = blueSpaceMessage;
+
+        playerScript.coins += coinsToAddOrRemove;
+
+        yield return new WaitForSeconds(3);
+
+        eventUI.gameObject.SetActive(false);
+        SpawnDiceBlock();
+        turn++;
+    }
+
+    IEnumerator RedSpace()
+    {
+        eventUI.gameObject.SetActive(true);
+        eventUI.text = redSpaceMessage;
+
+        playerScript.coins -= coinsToAddOrRemove;
+
+        yield return new WaitForSeconds(3);
+
+        eventUI.gameObject.SetActive(false);
+        SpawnDiceBlock();
+        turn++;
     }
 
     IEnumerator EventSpace(int index)
@@ -197,8 +235,10 @@ public class GameManager : MonoBehaviour
         playerScript.stars += eventActions[index].starsToAdd;
         playerScript.stars -= eventActions[index].starsToRemove;
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
 
         eventUI.gameObject.SetActive(false);
+        SpawnDiceBlock();
+        turn++;
     }
 }
