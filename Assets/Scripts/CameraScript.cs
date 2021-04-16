@@ -2,7 +2,7 @@
     Script Name: CameraScript.cs
     Purpose: Follow the player when moving.
     Author: Logan Ryan
-    Last Edit: 12 April 2021
+    Last Edit: 16 April 2021
 -------------------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------------------*/
@@ -28,6 +28,6 @@ public class CameraScript : MonoBehaviour
     {
         Vector3 playerPos = player.transform.position;
 
-        gameObject.transform.position = new Vector3(playerPos.x, transform.position.y, transform.position.z);
+        gameObject.transform.position = new Vector3(playerPos.x, transform.position.y, playerPos.z - 10);
     }
 }

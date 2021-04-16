@@ -2,7 +2,7 @@
     Script Name: PlayerScript.cs
     Purpose: Control the player while their on the board stage.
     Author: Logan Ryan
-    Last Edit: 15 April 2021
+    Last Edit: 16 April 2021
 ---------------------------------------------------------------
     Copyright 2021 Logan Ryan
 -------------------------------------------------------------*/
@@ -30,9 +30,7 @@ public class PlayerScript : MonoBehaviour
     Rigidbody playerRB;
     GameObject startingSpace;
     GameObject currentSpace;
-    Vector3 posOfSpace;
     bool diceBlockHit = false;
-    int xPosOfSpace = 0;
     bool isGrounded = true;
 
     // Start is called before the first frame update
@@ -107,46 +105,8 @@ public class PlayerScript : MonoBehaviour
         {
             float step = speed * Time.deltaTime;
 
-            //transform.position = Vector3.MoveTowards(transform.position, posOfSpace, step);
             transform.position += transform.forward * step;
-
-            //Debug.Log(Vector3.Distance(transform.position, posOfSpace));
-            // On Arrival Function
-            //if (Vector3.Distance(transform.position, posOfSpace) < 0.001f)
-            //{
-            //    moveSpaces--;
-
-            //    arrived = true;
-            //    diceBlockHit = false;
-
-            //    startingSpace = null;
-
-            //    // Check what sort of space the player is on
-            //    Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
-
-            //    //Debug.Log(spaceMat);
-            //    switch (spaceMat.name)
-            //    {
-            //        // Add coins when player lands on blue space
-            //        case "BlueSpaceMat (Instance)":
-            //            gameManager.boardSpace = GameManager.SpaceType.BLUE;
-            //            break;
-            //        // Remove coins when player lands on red space 
-            //        case "RedSpaceMat (Instance)":
-            //            gameManager.boardSpace = GameManager.SpaceType.RED;
-            //            break;
-            //        // Add a star when the player buys a star
-            //        case "StarSpaceMat (Instance)":
-            //            gameManager.boardSpace = GameManager.SpaceType.STAR;
-            //            break;
-            //        case "EventSpaceMat (Instance)":
-            //            gameManager.boardSpace = GameManager.SpaceType.EVENT;
-            //            break;
-            //    }
-            //}
         }
-
-        //Debug.Log(posOfSpace);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -156,9 +116,6 @@ public class PlayerScript : MonoBehaviour
             DiceScript diceScript = collision.gameObject.GetComponent<DiceScript>();
 
             moveSpaces = diceScript.number;
-            xPosOfSpace = moveSpaces * 2;
-
-            posOfSpace = new Vector3(transform.position.x + xPosOfSpace, 1);
             
             Destroy(collision.gameObject);
         }
@@ -183,13 +140,19 @@ public class PlayerScript : MonoBehaviour
         {
             moveSpaces--;
 
-            //// Check if the player is on the star space
-            //Material spaceMat = other.gameObject.GetComponentInParent<MeshRenderer>().material;
+            // Check what sort of space the player is on
+            Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
 
-            //if (spaceMat.name == "StarSpaceMat (Instance)")
-            //{
-            //    gameManager.boardSpace = GameManager.SpaceType.STAR;
-            //}
+            if (spaceMat.name == "LeftArrowSpaceMat (Instance)")
+            {
+                transform.Rotate(0, -90, 0);
+                moveSpaces++;
+            }
+            else if (spaceMat.name == "RightArrowSpaceMat (Instance)")
+            {
+                transform.Rotate(0, 90, 0);
+                moveSpaces++;
+            }
 
             if (moveSpaces == 0)
             {
@@ -198,10 +161,6 @@ public class PlayerScript : MonoBehaviour
 
                 startingSpace = null;
 
-                // Check what sort of space the player is on
-                Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
-
-                //Debug.Log(spaceMat);
                 switch (spaceMat.name)
                 {
                     // Add coins when player lands on blue space
