@@ -106,6 +106,10 @@ public class PlayerScript : MonoBehaviour
             float step = speed * Time.deltaTime;
 
             transform.position += transform.forward * step;
+
+            //Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
+
+            
         }
     }
 
@@ -153,6 +157,10 @@ public class PlayerScript : MonoBehaviour
                 transform.Rotate(0, 90, 0);
                 moveSpaces++;
             }
+            else if (spaceMat.name == "StarSpaceMat (Instance)")
+            {
+                gameManager.boardSpace = GameManager.SpaceType.STAR;
+            }
 
             if (moveSpaces == 0)
             {
@@ -180,7 +188,6 @@ public class PlayerScript : MonoBehaviour
                         break;
                 }
             }
-            
         }
     }
 }

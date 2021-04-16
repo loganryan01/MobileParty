@@ -48,12 +48,18 @@ public class GameManager : MonoBehaviour
     int turn = 1;
 
     [SerializeField]
+    GameObject starSpacePrefab;
+    [SerializeField]
+    GameObject[] boardSpaces;
+    //[SerializeField]
+    GameObject starBoardSpace;
+    GameObject starSpace;
+    [SerializeField]
     GameObject diceBlockPrefab;
     [SerializeField]
     GameObject player;
     [SerializeField]
     int maximumTurns;
-    
 
     private void Awake()
     {
@@ -91,9 +97,6 @@ public class GameManager : MonoBehaviour
             // If the player has no more move spaces
             if (playerScript.moveSpaces == 0)
             {
-                //string zeroText = "0";
-
-                //diceText.text = zeroText;
                 diceText.gameObject.SetActive(false);
             }
         }
@@ -126,6 +129,12 @@ public class GameManager : MonoBehaviour
         coinText.text = "Coins: " + playerScript.coins;
 
         //====== STAR CONTROLS =====
+        // Spawn star space if it doesn't exists
+        if (!GameObject.Find("StarSpace(Clone)"))
+        {
+            SpawnStarSpace();
+        }
+
         if (playerScript.stars < 0)
         {
             playerScript.stars = 0;
@@ -133,7 +142,7 @@ public class GameManager : MonoBehaviour
 
         if (boardSpace == SpaceType.STAR)
         {
-            diceText.gameObject.SetActive(true);
+            diceText.gameObject.SetActive(false);
             Time.timeScale = 0;
             starQuestion.text = "Do you want to buy the star?";
             starUI.SetActive(true);
@@ -156,6 +165,22 @@ public class GameManager : MonoBehaviour
         boardSpace = SpaceType.NONE;
     }
 
+    void SpawnStarSpace()
+    {
+        int index = Random.Range(0, boardSpaces.Length);
+
+        while (starBoardSpace == boardSpaces[index])
+        {
+            index = Random.Range(0, boardSpaces.Length);
+        }
+
+        starBoardSpace = boardSpaces[index];
+
+        starSpace = Instantiate(starSpacePrefab, starBoardSpace.transform.position, starBoardSpace.transform.rotation);
+
+        starBoardSpace.SetActive(false);
+    }
+
     public void ObtainStar()
     {
         if (playerScript.coins >= priceForAStar)
@@ -163,6 +188,10 @@ public class GameManager : MonoBehaviour
             starQuestion.text = "Congratulations, You got a star!";
             playerScript.coins -= priceForAStar;
             playerScript.stars++;
+
+            starBoardSpace.SetActive(true);
+            Destroy(starSpace);
+            SpawnStarSpace();
         }
         else if (playerScript.coins < priceForAStar)
         {
