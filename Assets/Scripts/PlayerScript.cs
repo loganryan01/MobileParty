@@ -106,10 +106,6 @@ public class PlayerScript : MonoBehaviour
             float step = speed * Time.deltaTime;
 
             transform.position += transform.forward * step;
-
-            //Material spaceMat = currentSpace.GetComponent<MeshRenderer>().material;
-
-            
         }
     }
 

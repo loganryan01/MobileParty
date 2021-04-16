@@ -2,7 +2,7 @@
     Script Name: GameManager.cs
     Purpose: Control the game.
     Author: Logan Ryan
-    Last Edit: 15 April 2021
+    Last Edit: 16 April 2021
 -------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------*/
@@ -51,7 +51,6 @@ public class GameManager : MonoBehaviour
     GameObject starSpacePrefab;
     [SerializeField]
     GameObject[] boardSpaces;
-    //[SerializeField]
     GameObject starBoardSpace;
     GameObject starSpace;
     [SerializeField]
@@ -60,10 +59,17 @@ public class GameManager : MonoBehaviour
     GameObject player;
     [SerializeField]
     int maximumTurns;
+    [SerializeField, Tooltip("Cannot be greater than the number of board spaces or equal to the number of red spaces")]
+    int numberOfBlueSpaces;
+    [SerializeField, Tooltip("Cannot be greater than the number of board spaces or equal to the number of blue spaces")]
+    int numberOfRedSpaces;
+    [SerializeField]
+    Material[] boardSpaceMaterials;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        RandomiseBoard();
     }
 
     // Start is called before the first frame update
@@ -163,6 +169,32 @@ public class GameManager : MonoBehaviour
 
         // Reset the boardSpace variable 
         boardSpace = SpaceType.NONE;
+    }
+
+    void RandomiseBoard()
+    {
+        int blueSpaces = 0;
+        int redSpaces = 0;
+        
+        foreach (GameObject boardSpace in boardSpaces)
+        {
+            int index = Random.Range(0, boardSpaceMaterials.Length);
+            
+
+            Material boardSpaceMaterial = boardSpaceMaterials[index];
+            
+            if (boardSpaceMaterial.name == "BlueSpaceMat" && blueSpaces != numberOfBlueSpaces)
+            {
+                boardSpace.GetComponent<MeshRenderer>().material = boardSpaceMaterial;
+                blueSpaces++;
+            }
+            else if (boardSpaceMaterial.name == "RedSpaceMat" && redSpaces != numberOfRedSpaces)
+            {
+                boardSpace.GetComponent<MeshRenderer>().material = boardSpaceMaterial;
+                redSpaces++;
+            }
+            
+        }
     }
 
     void SpawnStarSpace()
