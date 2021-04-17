@@ -2,7 +2,7 @@
     Script Name: GameManager.cs
     Purpose: Control the game.
     Author: Logan Ryan
-    Last Edit: 16 April 2021
+    Last Edit: 17 April 2021
 -------------------------------
     Copyright 2021 Logan Ryan
 -----------------------------*/
@@ -22,59 +22,78 @@ public class GameManager : MonoBehaviour
         STAR
     }
     
-    //===== PUBLIC VARIABLES =====
+    [Header("Dice Settings")]
     public TextMeshProUGUI diceText;
-    public TextMeshProUGUI turnText;
-    public TextMeshProUGUI coinText;
-    public TextMeshProUGUI starText;
-    public TextMeshProUGUI starQuestion;
-    public GameObject starUI;
-    public TextMeshProUGUI eventUI;
-    public GameObject continueButton;
-    public EventAction[] eventActions;
+    [SerializeField]
+    GameObject diceBlockPrefab;
+    DiceScript diceScript;
+    GameObject diceBlock;
 
+    [Header("Coin Settings")]
+    public TextMeshProUGUI coinText;
     public int coinsToAddOrRemove = 5;
     public string blueSpaceMessage;
     public string redSpaceMessage;
-    public int priceForAStar = 20;
 
+    [Header("Star Settings")]
+    public TextMeshProUGUI starText;
+    public TextMeshProUGUI starQuestion;
+    public int priceForAStar = 20;
+    [SerializeField]
+    GameObject starSpacePrefab;
+    public GameObject starUI;
+    public GameObject continueButton;
+    GameObject starBoardSpace;
+    GameObject starSpace;
+
+    [Header("Event Spaces Settings")]
+    public TextMeshProUGUI eventUI;
+    public EventAction[] eventActions;
+
+    [Header("Player Settings")]
+    [SerializeField]
+    GameObject player;
+    PlayerScript playerScript;
+
+    [Header("Board Spaces Settings")]
+    public TextMeshProUGUI turnText;
+   
+    GameObject[] boardSpaces;
+    int turn = 1;
+    [SerializeField]
+    int maximumTurns;
+    public Material[] boardSpaceMaterials;
+    [HideInInspector]
+    public int[] numberOfSpaces;
+    public List<int> number;
+    [HideInInspector]
+    public bool randomiseBoard = true;
+    [HideInInspector]
+    public int numberOfBlueSpaces;
+    [HideInInspector]
+    public int numberOfRedSpaces;
     [HideInInspector]
     public SpaceType boardSpace;
 
-    //===== PRIVATE VARIABLES =====
-    DiceScript diceScript;
-    PlayerScript playerScript;
-    GameObject diceBlock;
-    int turn = 1;
-
-    [SerializeField]
-    GameObject starSpacePrefab;
-    [SerializeField]
-    GameObject[] boardSpaces;
-    GameObject starBoardSpace;
-    GameObject starSpace;
-    [SerializeField]
-    GameObject diceBlockPrefab;
-    [SerializeField]
-    GameObject player;
-    [SerializeField]
-    int maximumTurns;
-    [SerializeField, Tooltip("Cannot be greater than the number of board spaces or equal to the number of red spaces")]
-    int numberOfBlueSpaces;
-    [SerializeField, Tooltip("Cannot be greater than the number of board spaces or equal to the number of blue spaces")]
-    int numberOfRedSpaces;
-    [SerializeField]
-    Material[] boardSpaceMaterials;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        RandomiseBoard();
+
+        // Get all the board spaces
+        boardSpaces = GameObject.FindGameObjectsWithTag("BoardSpace");
+
+        if (randomiseBoard)
+        {
+            RandomiseBoard();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        
+        
         Vector3 playerPosition = new Vector3(player.transform.position.x,
                                              player.transform.position.y + 2.75f,
                                              player.transform.position.z);
@@ -173,27 +192,36 @@ public class GameManager : MonoBehaviour
 
     void RandomiseBoard()
     {
-        int blueSpaces = 0;
-        int redSpaces = 0;
-        
+        // For each space on the board
         foreach (GameObject boardSpace in boardSpaces)
         {
+            // Choose what type of board space it will be
             int index = Random.Range(0, boardSpaceMaterials.Length);
-            
 
+            // If there are meant to be no more blue spaces then make it a red space and vice versa
+            if (index == 0 && numberOfBlueSpaces == 0)
+            {
+                index = 1;
+            }
+            else if (index == 1 && numberOfRedSpaces == 0)
+            {
+                index = 0;
+            }
+
+            // Get the material for the board space
             Material boardSpaceMaterial = boardSpaceMaterials[index];
             
-            if (boardSpaceMaterial.name == "BlueSpaceMat" && blueSpaces != numberOfBlueSpaces)
+            // Set the material based on what type of space it is
+            if (boardSpaceMaterial.name == "BlueSpaceMat" && numberOfBlueSpaces != 0)
             {
                 boardSpace.GetComponent<MeshRenderer>().material = boardSpaceMaterial;
-                blueSpaces++;
+                numberOfBlueSpaces--;
             }
-            else if (boardSpaceMaterial.name == "RedSpaceMat" && redSpaces != numberOfRedSpaces)
+            else if (boardSpaceMaterial.name == "RedSpaceMat" && numberOfRedSpaces != 0)
             {
                 boardSpace.GetComponent<MeshRenderer>().material = boardSpaceMaterial;
-                redSpaces++;
+                numberOfRedSpaces--;
             }
-            
         }
     }
 

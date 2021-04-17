@@ -135,7 +135,7 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("BoardSpace") && 
+        if (other.gameObject.CompareTag("BoardTrigger") && 
             startingSpace != other.gameObject.transform.parent.gameObject)
         {
             moveSpaces--;

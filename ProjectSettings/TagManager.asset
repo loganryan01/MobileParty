@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DiceBlock
   - BoardSpace
+  - BoardTrigger
   layers:
   - Default
   - TransparentFX
